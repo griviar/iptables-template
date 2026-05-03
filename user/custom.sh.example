@@ -1,5 +1,6 @@
 # Copy this file to user/custom.sh and uncomment what you need.
 # This file is appended after all general and tag rules.
+# All variables from user/.env are available here.
 
 # ════════════════════════════════════════════════════════════════════
 #  SSH: restrict to whitelist on a non-standard port
@@ -13,14 +14,28 @@
 #  Step 2 — create user/ipsets/ssh-list with your allowed IPs/subnets
 #            (see user/ipsets/ssh-list.example)
 #
-#  Step 3 — set PORT_SSH in user/.env:
+#  Step 3 — set PORT_SSH in user/.env (only if using non-standard port):
 #              export PORT_SSH=2222
 #
-#  Step 4 — uncomment the block below
+#  Step 4 — uncomment the line below
 # ════════════════════════════════════════════════════════════════════
 
-# SSH_SET="ssh-list"   # must match filename in user/ipsets/
-# $IPT -A INPUT -m set --match-set $SSH_SET src -p tcp --dport $PORT_SSH -j ACCEPT
+# $IPT -A INPUT -m set --match-set ssh-list src -p tcp --dport ${PORT_SSH:-22} -j ACCEPT
+
+
+# ════════════════════════════════════════════════════════════════════
+#  APP port: restrict a management/application port to a whitelist
+#
+#  Step 1 — create user/ipsets/app-list with your allowed IPs/subnets
+#            (see user/ipsets/app-list.example)
+#
+#  Step 2 — set PORT_APP in user/.env:
+#              export PORT_APP=8443
+#
+#  Step 3 — uncomment the line below
+# ════════════════════════════════════════════════════════════════════
+
+# $IPT -A INPUT -m set --match-set app-list src -p tcp --dport $PORT_APP -j ACCEPT
 
 
 # ── Other custom rules ───────────────────────────────────────────────────────

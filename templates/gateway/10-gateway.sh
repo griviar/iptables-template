@@ -1,4 +1,6 @@
 # Requires in user/.env:  LAN1=eth1  and  LAN1_IP_RANGE=10.1.3.0/24
+: "${LAN1:?LAN1 is not set — add to user/.env for gateway tag (e.g. export LAN1=eth1)}"
+: "${LAN1_IP_RANGE:?LAN1_IP_RANGE is not set — add to user/.env for gateway tag (e.g. export LAN1_IP_RANGE=10.0.0.0/24)}"
 
 # Allow traffic from/to LAN interface
 $IPT -A INPUT  -i $LAN1 -j ACCEPT

@@ -41,13 +41,15 @@ Each file in this directory becomes one IPSet. The filename is the set name. Typ
 5.6.7.8 # label      # inline comment stripped, IP used
 ```
 
-The set name in `10-vars.sh` (`APP_SET=app-list`) must match the filename in `user/ipsets/`.
-
 ## SSH access
 
-Default (`templates/general/90-ssh.sh`): port 22 open for all.
+Default (`templates/general/90-ssh.sh`): port 22 open for all, hardcoded — no variable needed.
 
-To harden (whitelist + custom port): comment out the open rule in `90-ssh.sh`, then uncomment the SSH block in `user/custom.sh` — see `user/custom.sh.example` for the full 4-step instructions.
+To harden (whitelist + custom port): comment out the open rule in `90-ssh.sh`, then uncomment the SSH block in `user/custom.sh` — see `user/custom.sh.example` for the full steps. `PORT_SSH` in `user/.env` is only needed when using a non-standard port.
+
+## APP port whitelist (optional)
+
+Not in any template by default. See `user/custom.sh.example` — requires `PORT_APP` in `user/.env` and `user/ipsets/app-list`.
 
 ## Adding a new tag
 

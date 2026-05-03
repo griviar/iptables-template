@@ -69,4 +69,13 @@ fi
 info "Done."
 info "  IPTables : $RULES_V4"
 info "  IPSet    : $IPSET_FILE"
-info "Rules will be restored automatically on next boot via netfilter-persistent."
+
+# ── Check autostart ───────────────────────────────────────────────────────────
+
+if systemctl is-enabled --quiet netfilter-persistent 2>/dev/null; then
+    info "netfilter-persistent is enabled — rules will be restored on next boot."
+else
+    warn "netfilter-persistent is NOT enabled in autostart."
+    warn "Rules were saved but won't be restored on reboot until you run:"
+    warn "  sudo systemctl enable netfilter-persistent"
+fi

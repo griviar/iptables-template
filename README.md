@@ -74,6 +74,8 @@ sudo bash iptables.sh
 
 # 8. Сохранить правила для автозагрузки (требует iptables-persistent, ipset-persistent)
 sudo bash save.sh
+# Если сервис не включён, скрипт предупредит и покажет команду для включения:
+# sudo systemctl enable netfilter-persistent
 ```
 
 ---
@@ -104,19 +106,21 @@ logging
 
 ## Файл `user/.env`
 
-Переменные, специфичные для конкретного сервера. `detect-wan.sh` заполняет WAN и WAN_IP автоматически.
+Переменные, специфичные для конкретного сервера. `detect-wan.sh` заполняет `WAN` и `WAN_IP` автоматически. Остальное — по необходимости.
 
 ```bash
 export WAN=eth0
 export WAN_IP=1.2.3.4
-export PORT_APP=46284
 
 # Для тега gateway:
 # export LAN1=eth1
 # export LAN1_IP_RANGE=10.1.3.0/24
 
-# Для SSH-вайтлиста (см. user/custom.sh.example):
+# Только если SSH на нестандартном порту (см. user/custom.sh.example):
 # export PORT_SSH=2222
+
+# Только если используется APP-вайтлист (см. user/custom.sh.example):
+# export PORT_APP=8443
 ```
 
 ---
@@ -132,15 +136,15 @@ export PORT_APP=46284
 5.6.7.8 # офис      # инлайн-комментарий обрезается, IP берётся
 ```
 
-Имя сета в `10-vars.sh` (`APP_SET=app-list`) должно совпадать с именем файла в `user/ipsets/`.
+Имя файла используется напрямую как имя сета в правилах `user/custom.sh`.
 
 ---
 
 ## SSH-доступ
 
-По умолчанию (`templates/general/90-ssh.sh`) — порт 22 открыт для всех.
+По умолчанию (`templates/general/90-ssh.sh`) — порт 22 открыт для всех, захардкожен в правиле.
 
-Чтобы ограничить SSH вайтлистом на нестандартном порту — см. инструкцию в `user/custom.sh.example` (4 шага).
+Чтобы ограничить SSH вайтлистом или сменить порт — см. инструкцию в `user/custom.sh.example`. `PORT_SSH` в `user/.env` нужен только при использовании нестандартного порта.
 
 ---
 
@@ -163,11 +167,14 @@ $IPT -A INPUT -s 84.122.21.197 -j REJECT
 ```
 templates/general/10-vars.sh      ← константы
 user/.env                         ← серверные переменные
+preflight check                   ← проверка обязательных переменных (WAN, PORT_APP)
 user/ipsets/*                     ← создание и наполнение IPset-ов
 templates/general/30-90-*.sh      ← базовые правила
 templates/<tag>/*.sh              ← правила тегов (в порядке .tag)
 user/custom.sh                    ← индивидуальные правила сервера
 ```
+
+Если `WAN` или `PORT_APP` не заданы, `iptables.sh` завершится с ошибкой до применения каких-либо правил.
 
 ---
 
