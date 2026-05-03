@@ -1,0 +1,8 @@
+# Application whitelist — copy this file to user/ipsets/app-list
+# Addresses allowed to reach PORT_APP (management/app port)
+
+# Office
+1.2.3.4
+
+# Monitoring server
+5.6.7.9

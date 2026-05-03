@@ -1,0 +1,9 @@
+# Server-specific files — created locally on each server, never committed
+.tag
+user/.env
+user/ipsets/*
+!user/ipsets/*.example
+user/custom.sh
+
+# Generated output
+iptables.sh

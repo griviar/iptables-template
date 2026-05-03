@@ -1,0 +1,16 @@
+# Server role tags — copy to .tag and list the roles that apply to this server.
+# One tag per line. Available tags:
+#
+#   web       — HTTP (80) + HTTPS (443)
+#   mail      — SMTP, POP3, IMAP (plain + SSL)
+#   sip       — SIP signaling + RTP media streams
+#   h323      — H.323 video conferencing
+#   dns       — Authoritative DNS server
+#   gateway   — NAT router / LAN gateway  (needs LAN1/LAN1_IP_RANGE in user/.env)
+#   logging   — Log all dropped packets   (list LAST if used)
+#
+# Example for a web + mail server:
+# web
+# mail
+
+web

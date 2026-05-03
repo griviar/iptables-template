@@ -1,0 +1,4 @@
+# Force LF line endings on Linux servers
+*.sh    text eol=lf
+.tag    text eol=lf
+.env    text eol=lf

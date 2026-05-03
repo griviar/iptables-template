@@ -1,0 +1,40 @@
+# Copy this file to user/custom.sh and uncomment what you need.
+# This file is appended after all general and tag rules.
+
+# ════════════════════════════════════════════════════════════════════
+#  SSH: restrict to whitelist on a non-standard port
+#
+#  By default, templates/general/90-ssh.sh opens SSH on port 22 for
+#  everyone.  To replace that with whitelist-only access:
+#
+#  Step 1 — comment out the open rule in templates/general/90-ssh.sh:
+#              $IPT -A INPUT -p tcp --dport 22 -j ACCEPT
+#
+#  Step 2 — create user/ipsets/ssh-list with your allowed IPs/subnets
+#            (see user/ipsets/ssh-list.example)
+#
+#  Step 3 — set PORT_SSH in user/.env:
+#              export PORT_SSH=2222
+#
+#  Step 4 — uncomment the block below
+# ════════════════════════════════════════════════════════════════════
+
+# SSH_SET="ssh-list"   # must match filename in user/ipsets/
+# $IPT -A INPUT -m set --match-set $SSH_SET src -p tcp --dport $PORT_SSH -j ACCEPT
+
+
+# ── Other custom rules ───────────────────────────────────────────────────────
+
+# Block a specific IP:
+# $IPT -A INPUT -s 84.122.21.197 -j REJECT
+
+# Open a non-standard port:
+# $IPT -A INPUT -p tcp --dport 8080 -j ACCEPT
+
+# Extra HTTPS ports:
+# $IPT -A INPUT -p tcp --dport 8443 -j ACCEPT
+# $IPT -A INPUT -p tcp --dport 9443 -j ACCEPT
+
+# Port forwarding (for gateway servers — also needs gateway tag):
+# $IPT -t nat -A PREROUTING -i $WAN -p tcp --dport 23543 -j DNAT --to 10.1.3.50:3389
+# $IPT -A FORWARD -i $WAN -d 10.1.3.50 -p tcp --dport 3389 -j ACCEPT
